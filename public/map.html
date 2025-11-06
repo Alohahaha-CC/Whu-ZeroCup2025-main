@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山河漫游 - 方寸之间，万里山河</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2E8B57',
+                        secondary: '#5F9EA0',
+                        accent: '#8FBC8F',
+                        light: '#F5F5DC',
+                        dark: '#2F4F4F'
+                    },
+                    fontFamily: {
+                        song: ['SimSun', 'serif'],
+                        hei: ['SimHei', 'sans-serif']
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+            .route-line {
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation: dash 3s linear forwards;
+            }
+            @keyframes dash {
+                to {
+                    stroke-dashoffset: 0;
+                }
+            }
+            .float-animation {
+                animation: float 3s ease-in-out infinite;
+            }
+            @keyframes float {
+                0%, 100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+            .scale-up {
+                transition: transform 0.3s ease;
+            }
+            .scale-up:hover {
+                transform: scale(1.05);
+            }
+            .card-appear {
+                animation: fadeInUp 0.5s ease forwards;
+            }
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        }
+    </style>
+</head>
+<body class="bg-light overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-dark/80 bg-blur">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-white hover:text-accent transition-colors duration-300">首页</a>
+                <a href="map.html" class="text-accent font-medium transition-colors duration-300">山河漫游</a>
+                <a href="#" class="text-white hover:text-accent transition-colors duration-300">过关闯将</a>
+                <a href="#" class="text-white hover:text-accent transition-colors duration-300">云锦书来</a>
+            </div>
+            <button class="md:hidden text-white text-2xl" id="menuBtn">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        <!-- 移动端菜单 -->
+        <div class="md:hidden bg-dark/90 bg-blur hidden" id="mobileMenu">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="index.html" class="text-white hover:text-accent transition-colors duration-300 py-2">首页</a>
+                <a href="map.html" class="text-accent font-medium transition-colors duration-300 py-2">山河漫游</a>
+                <a href="#" class="text-white hover:text-accent transition-colors duration-300 py-2">过关闯将</a>
+                <a href="#" class="text-white hover:text-accent transition-colors duration-300 py-2">云锦书来</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <header class="pt-32 pb-16 text-center bg-gradient-to-b from-dark to-primary">
+        <div class="container mx-auto px-4">
+            <div class="mb-6">
+                <img src="PNG/shanhetuzhi.png" alt="山河漫游" class="max-w-full h-auto max-h-[clamp(2.5rem,8vw,5rem)] object-contain mx-auto">
+            </div>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 max-w-2xl mx-auto">
+                三条经典路线，带您领略中国大地的壮美与神奇
+            </p>
+        </div>
+    </header>
+
+    <!-- 路线导航 -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-4 md:gap-8" id="routeButtons">
+                <button class="route-btn active px-8 py-4 bg-gradient-to-r from-primary to-accent text-white rounded-lg shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex items-center space-x-2 w-full md:w-auto scale-up" data-route="route1">
+                    <i class="fa fa-map-signs text-xl"></i>
+                    <span>东部海岸线之旅</span>
+                </button>
+                <button class="route-btn px-8 py-4 bg-gradient-to-r from-primary/80 to-accent/80 text-white rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-1 flex items-center space-x-2 w-full md:w-auto scale-up" data-route="route2">
+                    <i class="fa fa-mountain text-xl"></i>
+                    <span>中部山水风光之旅</span>
+                </button>
+                <button class="route-btn px-8 py-4 bg-gradient-to-r from-primary/80 to-accent/80 text-white rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-1 flex items-center space-x-2 w-full md:w-auto scale-up" data-route="route3">
+                    <i class="fa fa-globe text-xl"></i>
+                    <span>西部壮美景观之旅</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 地图展示区 -->
+    <section class="py-16 bg-light relative overflow-hidden">
+        <div class="container mx-auto px-4">
+            <!-- 路线内容容器 -->
+            <div class="route-content active" id="route1Content">
+                <div class="flex flex-col lg:flex-row gap-8 items-center">
+                    <!-- 地图区域 -->
+                    <div class="w-full lg:w-1/2 relative">
+                        <div class="bg-white p-4 rounded-xl shadow-xl">
+                            <svg viewBox="0 0 800 600" class="w-full">
+                                <!-- 简化的中国地图轮廓 -->
+                                <path d="M300,100 C350,80 400,90 450,80 C500,70 550,90 600,80 C650,70 700,90 750,100 C730,150 720,200 710,250 C700,300 690,350 680,400 C670,450 660,500 650,550 C600,530 550,520 500,510 C450,500 400,510 350,520 C300,530 250,540 200,550 C210,500 220,450 230,400 C240,350 250,300 260,250 C270,200 280,150 290,100 Z" 
+                                      fill="#f5f5f5" stroke="#2E8B57" stroke-width="2"/>
+                                
+                                <!-- 东部路线 -->
+                                <path d="M250,450 L300,420 L350,400 L400,380 L450,360 L500,350 L550,340 L600,330 L650,340 L700,360" 
+                                      fill="none" stroke="#2E8B57" stroke-width="4" class="route-line"/>
+                                
+                                <!-- 路线节点 -->
+                                <circle cx="250" cy="450" r="8" fill="#2E8B57" class="scale-up" data-city="青岛"/>
+                                <circle cx="350" cy="400" r="8" fill="#2E8B57" class="scale-up" data-city="上海"/>
+                                <circle cx="450" cy="360" r="8" fill="#2E8B57" class="scale-up" data-city="杭州"/>
+                                <circle cx="550" cy="340" r="8" fill="#2E8B57" class="scale-up" data-city="厦门"/>
+                                <circle cx="650" cy="340" r="8" fill="#2E8B57" class="scale-up" data-city="广州"/>
+                                <circle cx="700" cy="360" r="8" fill="#2E8B57" class="scale-up" data-city="深圳"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- 路线详情 -->
+                    <div class="w-full lg:w-1/2">
+                        <div class="bg-white p-8 rounded-xl shadow-xl">
+                            <h2 class="text-3xl font-hei text-dark mb-6 flex items-center">
+                                <i class="fa fa-map-signs text-primary mr-3"></i> 东部海岸线之旅
+                            </h2>
+                            <div class="w-20 h-1 bg-primary mb-6"></div>
+                            
+                            <p class="text-gray-700 mb-8">
+                                这条路线沿着中国东部海岸线，串联起多个重要的沿海城市和旅游胜地。从北到南，您将领略到不同的海洋风光、城市魅力和人文景观。
+                            </p>
+                            
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-primary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">青岛</h4>
+                                    <p class="text-sm text-gray-600">海滨城市，啤酒之都，红瓦绿树，碧海蓝天</p>
+                                </div>
+                                <div class="border-l-4 border-primary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">上海</h4>
+                                    <p class="text-sm text-gray-600">国际大都市，外滩风光，东方明珠塔</p>
+                                </div>
+                                <div class="border-l-4 border-primary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">杭州</h4>
+                                    <p class="text-sm text-gray-600">人间天堂，西湖美景，江南水乡</p>
+                                </div>
+                                <div class="border-l-4 border-primary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">厦门</h4>
+                                    <p class="text-sm text-gray-600">海上花园城市，鼓浪屿，闽南风情</p>
+                                </div>
+                                <div class="border-l-4 border-primary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">广州</h4>
+                                    <p class="text-sm text-gray-600">千年商都，珠江夜景，岭南文化</p>
+                                </div>
+                                <div class="border-l-4 border-primary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">深圳</h4>
+                                    <p class="text-sm text-gray-600">创新之城，现代都市风光</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="route-content hidden" id="route2Content">
+                <div class="flex flex-col lg:flex-row gap-8 items-center">
+                    <!-- 地图区域 -->
+                    <div class="w-full lg:w-1/2 relative">
+                        <div class="bg-white p-4 rounded-xl shadow-xl">
+                            <svg viewBox="0 0 800 600" class="w-full">
+                                <!-- 简化的中国地图轮廓 -->
+                                <path d="M300,100 C350,80 400,90 450,80 C500,70 550,90 600,80 C650,70 700,90 750,100 C730,150 720,200 710,250 C700,300 690,350 680,400 C670,450 660,500 650,550 C600,530 550,520 500,510 C450,500 400,510 350,520 C300,530 250,540 200,550 C210,500 220,450 230,400 C240,350 250,300 260,250 C270,200 280,150 290,100 Z" 
+                                      fill="#f5f5f5" stroke="#2E8B57" stroke-width="2"/>
+                                
+                                <!-- 中部路线 -->
+                                <path d="M300,250 L350,280 L400,260 L450,250 L500,270 L550,260 L600,280" 
+                                      fill="none" stroke="#5F9EA0" stroke-width="4" class="route-line"/>
+                                
+                                <!-- 路线节点 -->
+                                <circle cx="300" cy="250" r="8" fill="#5F9EA0" class="scale-up" data-city="西安"/>
+                                <circle cx="350" cy="280" r="8" fill="#5F9EA0" class="scale-up" data-city="郑州"/>
+                                <circle cx="400" cy="260" r="8" fill="#5F9EA0" class="scale-up" data-city="武汉"/>
+                                <circle cx="450" cy="250" r="8" fill="#5F9EA0" class="scale-up" data-city="长沙"/>
+                                <circle cx="500" cy="270" r="8" fill="#5F9EA0" class="scale-up" data-city="成都"/>
+                                <circle cx="550" cy="260" r="8" fill="#5F9EA0" class="scale-up" data-city="重庆"/>
+                                <circle cx="600" cy="280" r="8" fill="#5F9EA0" class="scale-up" data-city="贵阳"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- 路线详情 -->
+                    <div class="w-full lg:w-1/2">
+                        <div class="bg-white p-8 rounded-xl shadow-xl">
+                            <h2 class="text-3xl font-hei text-dark mb-6 flex items-center">
+                                <i class="fa fa-mountain text-secondary mr-3"></i> 中部山水风光之旅
+                            </h2>
+                            <div class="w-20 h-1 bg-secondary mb-6"></div>
+                            
+                            <p class="text-gray-700 mb-8">
+                                这条路线贯穿中国中部地区，汇集了名山大川和历史文化名城。您将欣赏到壮丽的山水风光，感受深厚的历史文化底蕴。
+                            </p>
+                            
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-secondary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">西安</h4>
+                                    <p class="text-sm text-gray-600">十三朝古都，兵马俑，丝绸之路起点</p>
+                                </div>
+                                <div class="border-l-4 border-secondary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">郑州</h4>
+                                    <p class="text-sm text-gray-600">华夏文明发源地，嵩山少林寺</p>
+                                </div>
+                                <div class="border-l-4 border-secondary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">武汉</h4>
+                                    <p class="text-sm text-gray-600">江城，黄鹤楼，长江大桥</p>
+                                </div>
+                                <div class="border-l-4 border-secondary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">长沙</h4>
+                                    <p class="text-sm text-gray-600">岳麓山，橘子洲头，湖湘文化</p>
+                                </div>
+                                <div class="border-l-4 border-secondary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">成都</h4>
+                                    <p class="text-sm text-gray-600">天府之国，大熊猫基地，川菜文化</p>
+                                </div>
+                                <div class="border-l-4 border-secondary pl-4 py-1">
+                                    <h4 class="font-hei text-dark">重庆</h4>
+                                    <p class="text-sm text-gray-600">山城，火锅之都，长江三峡起点</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="route-content hidden" id="route3Content">
+                <div class="flex flex-col lg:flex-row gap-8 items-center">
+                    <!-- 地图区域 -->
+                    <div class="w-full lg:w-1/2 relative">
+                        <div class="bg-white p-4 rounded-xl shadow-xl">
+                            <svg viewBox="0 0 800 600" class="w-full">
+                                <!-- 简化的中国地图轮廓 -->
+                                <path d="M300,100 C350,80 400,90 450,80 C500,70 550,90 600,80 C650,70 700,90 750,100 C730,150 720,200 710,250 C700,300 690,350 680,400 C670,450 660,500 650,550 C600,530 550,520 500,510 C450,500 400,510 350,520 C300,530 250,540 200,550 C210,500 220,450 230,400 C240,350 250,300 260,250 C270,200 280,150 290,100 Z" 
+                                      fill="#f5f5f5" stroke="#2E8B57" stroke-width="2"/>
+                                
+                                <!-- 西部路线 -->
+                                <path d="M250,150 L300,180 L350,150 L400,180 L450,150 L500,170" 
+                                      fill="none" stroke="#8FBC8F" stroke-width="4" class="route-line"/>
+                                
+                                <!-- 路线节点 -->
+                                <circle cx="250" cy="150" r="8" fill="#8FBC8F" class="scale-up" data-city="拉萨"/>
+                                <circle cx="300" cy="180" r="8" fill="#8FBC8F" class="scale-up" data-city="西宁"/>
+                                <circle cx="350" cy="150" r="8" fill="#8FBC8F" class="scale-up" data-city="乌鲁木齐"/>
+                                <circle cx="400" cy="180" r="8" fill="#8FBC8F" class="scale-up" data-city="兰州"/>
+                                <circle cx="450" cy="150" r="8" fill="#8FBC8F" class="scale-up" data-city="银川"/>
+                                <circle cx="500" cy="170" r="8" fill="#8FBC8F" class="scale-up" data-city="呼和浩特"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- 路线详情 -->
+                    <div class="w-full lg:w-1/2">
+                        <div class="bg-white p-8 rounded-xl shadow-xl">
+                            <h2 class="text-3xl font-hei text-dark mb-6 flex items-center">
+                                <i class="fa fa-globe text-accent mr-3"></i> 西部壮美景观之旅
+                            </h2>
+                            <div class="w-20 h-1 bg-accent mb-6"></div>
+                            
+                            <p class="text-gray-700 mb-8">
+                                这条路线带您探索中国西部的壮美景观和多元文化。从雪域高原到沙漠绿洲，从草原牧场到民族风情，体验大自然的神奇与人文的魅力。
+                            </p>
+                            
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-accent pl-4 py-1">
+                                    <h4 class="font-hei text-dark">拉萨</h4>
+                                    <p class="text-sm text-gray-600">日光城，布达拉宫，藏族文化</p>
+                                </div>
+                                <div class="border-l-4 border-accent pl-4 py-1">
+                                    <h4 class="font-hei text-dark">西宁</h4>
+                                    <p class="text-sm text-gray-600">青藏高原门户，塔尔寺，青海湖</p>
+                                </div>
+                                <div class="border-l-4 border-accent pl-4 py-1">
+                                    <h4 class="font-hei text-dark">乌鲁木齐</h4>
+                                    <p class="text-sm text-gray-600">西域风情，天山天池，葡萄沟</p>
+                                </div>
+                                <div class="border-l-4 border-accent pl-4 py-1">
+                                    <h4 class="font-hei text-dark">兰州</h4>
+                                    <p class="text-sm text-gray-600">黄河之都，拉面文化，丝路重镇</p>
+                                </div>
+                                <div class="border-l-4 border-accent pl-4 py-1">
+                                    <h4 class="font-hei text-dark">银川</h4>
+                                    <p class="text-sm text-gray-600">塞上江南，西夏王陵，回族风情</p>
+                                </div>
+                                <div class="border-l-4 border-accent pl-4 py-1">
+                                    <h4 class="font-hei text-dark">呼和浩特</h4>
+                                    <p class="text-sm text-gray-600">草原青城，蒙古文化，昭君墓</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 景点数据统计 -->
+    <section class="py-16 bg-primary text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2" id="cityCount">18</div>
+                    <div class="text-white/80">精选城市</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2" id="routeLength">5000+</div>
+                    <div class="text-white/80">公里行程</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2" id="scenicCount">100+</div>
+                    <div class="text-white/80">景点覆盖</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2" id="cultureTypes">56</div>
+                    <div class="text-white/80">民族文化</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="bg-dark text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-2xl font-song mb-2">方寸之间，万里山河</div>
+                    <p class="text-gray-400 text-sm">探索中国壮美山河，感受自然与人文的和谐共生</p>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-gray-700 text-center text-gray-400 text-sm">
+                武汉大学2025零杯网页设计大赛 网页设计这一块组作品
+            </div>
+        </div>
+    </footer>
+
+    <!-- 景点信息卡片 -->
+    <div id="spotCard" class="fixed hidden z-50 bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 card-appear">
+        <div class="flex justify-between items-start mb-4">
+            <h3 class="text-xl font-hei text-dark" id="spotName">景点名称</h3>
+            <button id="closeCard" class="text-gray-400 hover:text-dark transition-colors">
+                <i class="fa fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="aspect-video bg-gray-200 rounded-lg mb-4 overflow-hidden">
+            <img id="spotImage" src="https://picsum.photos/id/1/400/225" alt="景点图片" class="w-full h-full object-cover">
+        </div>
+        <p class="text-gray-700 mb-4" id="spotDesc">景点详细介绍...</p>
+        <div class="flex justify-between text-sm text-gray-500">
+            <span id="spotLocation">位置信息</span>
+            <span id="spotLevel">AAAAA级景区</span>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 移动端菜单
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 路线切换功能
+        const routeBtns = document.querySelectorAll('.route-btn');
+        const routeContents = document.querySelectorAll('.route-content');
+
+        routeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除所有按钮的活跃状态
+                routeBtns.forEach(b => {
+                    b.classList.remove('active', 'shadow-lg');
+                    b.classList.add('shadow-md');
+                    b.classList.remove('bg-gradient-to-r', 'from-primary', 'to-accent');
+                    b.classList.add('bg-gradient-to-r', 'from-primary/80', 'to-accent/80');
+                });
+                
+                // 添加当前按钮的活跃状态
+                this.classList.add('active', 'shadow-lg');
+                this.classList.remove('shadow-md');
+                this.classList.remove('bg-gradient-to-r', 'from-primary/80', 'to-accent/80');
+                this.classList.add('bg-gradient-to-r', 'from-primary', 'to-accent');
+                
+                // 隐藏所有内容
+                routeContents.forEach(content => {
+                    content.classList.add('hidden');
+                    content.classList.remove('active');
+                });
+                
+                // 显示对应内容
+                const routeId = this.getAttribute('data-route');
+                const contentId = routeId + 'Content';
+                document.getElementById(contentId).classList.remove('hidden');
+                document.getElementById(contentId).classList.add('active');
+            });
+        });
+
+        // 轮播效果
+        let currentRoute = 0;
+        const routes = ['route1', 'route2', 'route3'];
+        
+        function rotateRoutes() {
+            // 模拟点击下一个按钮
+            currentRoute = (currentRoute + 1) % routes.length;
+            const routeId = routes[currentRoute];
+            const btn = document.querySelector(`.route-btn[data-route="${routeId}"]`);
+            btn.click();
+        }
+        
+        // 自动轮播，每5秒切换一次
+        let carouselInterval = setInterval(rotateRoutes, 5000);
+        
+        // 鼠标悬停时停止轮播
+        document.getElementById('routeButtons').addEventListener('mouseenter', function() {
+            clearInterval(carouselInterval);
+        });
+        
+        // 鼠标离开时恢复轮播
+        document.getElementById('routeButtons').addEventListener('mouseleave', function() {
+            carouselInterval = setInterval(rotateRoutes, 5000);
+        });
+
+        // 景点信息卡片数据
+        const spotData = {
+            '青岛': {
+                name: '青岛崂山',
+                desc: '崂山是中国海岸线第一高峰，有着海上第一名山的美誉。山上奇石怪洞，清泉流瀑，景色秀丽。',
+                image: 'https://picsum.photos/id/10/400/225',
+                location: '山东省青岛市',
+                level: 'AAAAA级景区'
+            },
+            '上海': {
+                name: '外滩',
+                desc: '外滩是上海的标志性景观，一边是充满异国情调的万国建筑群，一边是现代化的浦东陆家嘴金融区。',
+                image: 'https://picsum.photos/id/11/400/225',
+                location: '上海市黄浦区',
+                level: 'AAAA级景区'
+            },
+            '杭州': {
+                name: '西湖',
+                desc: '西湖以其秀丽的湖光山色和众多的人文景观闻名于世，被誉为人间天堂。',
+                image: 'https://picsum.photos/id/12/400/225',
+                location: '浙江省杭州市',
+                level: 'AAAAA级景区'
+            },
+            '厦门': {
+                name: '鼓浪屿',
+                desc: '鼓浪屿是一个充满异国风情的小岛，岛上保存着大量的欧式建筑，被誉为万国建筑博览馆。',
+                image: 'https://picsum.photos/id/13/400/225',
+                location: '福建省厦门市',
+                level: 'AAAAA级景区'
+            },
+            '广州': {
+                name: '广州塔',
+                desc: '广州塔又称小蛮腰，是中国第一高塔，登塔可俯瞰整个广州城市风光。',
+                image: 'https://picsum.photos/id/14/400/225',
+                location: '广东省广州市',
+                level: 'AAAA级景区'
+            },
+            '深圳': {
+                name: '深圳世界之窗',
+                desc: '世界之窗集世界奇观、历史遗迹、古今名胜于一体，是一个大型主题公园。',
+                image: 'https://picsum.photos/id/15/400/225',
+                location: '广东省深圳市',
+                level: 'AAAAA级景区'
+            },
+            '西安': {
+                name: '兵马俑',
+                desc: '秦始皇兵马俑被誉为世界第八大奇迹，是中国古代辉煌文明的一张金字名片。',
+                image: 'https://picsum.photos/id/16/400/225',
+                location: '陕西省西安市',
+                level: 'AAAAA级景区'
+            },
+            '郑州': {
+                name: '嵩山少林寺',
+                desc: '少林寺是中国功夫的发源地，有着天下第一名刹的美誉。',
+                image: 'https://picsum.photos/id/17/400/225',
+                location: '河南省郑州市',
+                level: 'AAAAA级景区'
+            },
+            '武汉': {
+                name: '黄鹤楼',
+                desc: '黄鹤楼是中国江南三大名楼之一，与滕王阁、岳阳楼齐名。',
+                image: 'https://picsum.photos/id/18/400/225',
+                location: '湖北省武汉市',
+                level: 'AAAAA级景区'
+            },
+            '长沙': {
+                name: '岳麓山',
+                desc: '岳麓山是南岳衡山72峰之一，山上有岳麓书院、爱晚亭等众多名胜古迹。',
+                image: 'https://picsum.photos/id/19/400/225',
+                location: '湖南省长沙市',
+                level: 'AAAAA级景区'
+            },
+            '成都': {
+                name: '都江堰',
+                desc: '都江堰是世界文化遗产，是中国古代水利工程的杰作。',
+                image: 'https://picsum.photos/id/20/400/225',
+                location: '四川省成都市',
+                level: 'AAAAA级景区'
+            },
+            '重庆': {
+                name: '长江三峡',
+                desc: '长江三峡是瞿塘峡、巫峡和西陵峡的总称，以壮丽的自然风光闻名于世。',
+                image: 'https://picsum.photos/id/21/400/225',
+                location: '重庆市、湖北省',
+                level: 'AAAAA级景区'
+            },
+            '贵阳': {
+                name: '黄果树瀑布',
+                desc: '黄果树瀑布是中国最大的瀑布，以水势浩大著称。',
+                image: 'https://picsum.photos/id/22/400/225',
+                location: '贵州省安顺市',
+                level: 'AAAAA级景区'
+            },
+            '拉萨': {
+                name: '布达拉宫',
+                desc: '布达拉宫是世界上海拔最高的宫殿，是藏传佛教的圣地。',
+                image: 'https://picsum.photos/id/23/400/225',
+                location: '西藏自治区拉萨市',
+                level: 'AAAAA级景区'
+            },
+            '西宁': {
+                name: '青海湖',
+                desc: '青海湖是中国最大的内陆湖泊，湖水蔚蓝，周围草原辽阔。',
+                image: 'https://picsum.photos/id/24/400/225',
+                location: '青海省西宁市',
+                level: 'AAAAA级景区'
+            },
+            '乌鲁木齐': {
+                name: '天山天池',
+                desc: '天山天池是一个高山湖泊，湖水清澈，周围群山环抱，景色壮观。',
+                image: 'https://picsum.photos/id/25/400/225',
+                location: '新疆维吾尔自治区昌吉州',
+                level: 'AAAAA级景区'
+            },
+            '兰州': {
+                name: '黄河母亲雕像',
+                desc: '黄河母亲雕像是兰州的标志性景点，象征着黄河母亲哺育华夏儿女。',
+                image: 'https://picsum.photos/id/26/400/225',
+                location: '甘肃省兰州市',
+                level: 'AAAA级景区'
+            },
+            '银川': {
+                name: '西夏王陵',
+                desc: '西夏王陵是西夏历代帝王的陵墓群，被誉为东方金字塔。',
+                image: 'https://picsum.photos/id/27/400/225',
+                location: '宁夏回族自治区银川市',
+                level: 'AAAA级景区'
+            },
+            '呼和浩特': {
+                name: '希拉穆仁草原',
+                desc: '希拉穆仁草原是典型的温带草原，草原辽阔，牛羊成群。',
+                image: 'https://picsum.photos/id/28/400/225',
+                location: '内蒙古自治区呼和浩特市',
+                level: 'AAAA级景区'
+            }
+        };
+
+        // 显示景点信息卡片
+        const spotCard = document.getElementById('spotCard');
+        const spotName = document.getElementById('spotName');
+        const spotDesc = document.getElementById('spotDesc');
+        const spotImage = document.getElementById('spotImage');
+        const spotLocation = document.getElementById('spotLocation');
+        const spotLevel = document.getElementById('spotLevel');
+        const closeCard = document.getElementById('closeCard');
+
+        // 为所有地图上的节点添加事件
+        const nodes = document.querySelectorAll('circle[data-city]');
+        nodes.forEach(node => {
+            node.addEventListener('mouseenter', function(e) {
+                const city = this.getAttribute('data-city');
+                const spot = spotData[city];
+                
+                if (spot) {
+                    spotName.textContent = spot.name;
+                    spotDesc.textContent = spot.desc;
+                    spotImage.src = spot.image;
+                    spotLocation.textContent = spot.location;
+                    spotLevel.textContent = spot.level;
+                    
+                    // 计算卡片位置
+                    const rect = this.getBoundingClientRect();
+                    spotCard.style.left = `${rect.left + rect.width}px`;
+                    spotCard.style.top = `${rect.top}px`;
+                    spotCard.style.display = 'block';
+                }
+            });
+            
+            node.addEventListener('mouseleave', function() {
+                // 延迟隐藏，让用户有时间将鼠标移到卡片上
+                setTimeout(() => {
+                    if (!spotCard.matches(':hover')) {
+                        spotCard.style.display = 'none';
+                    }
+                }, 300);
+            });
+        });
+
+        // 点击关闭按钮隐藏卡片
+        closeCard.addEventListener('click', function() {
+            spotCard.style.display = 'none';
+        });
+
+        // 点击卡片外部隐藏卡片
+        document.addEventListener('click', function(e) {
+            if (!spotCard.contains(e.target) && !e.target.closest('circle[data-city]')) {
+                spotCard.style.display = 'none';
+            }
+        });
+
+        // 卡片悬停时保持显示
+        spotCard.addEventListener('mouseenter', function() {
+            spotCard.style.display = 'block';
+        });
+
+        spotCard.addEventListener('mouseleave', function() {
+            spotCard.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

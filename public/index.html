@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山河图志</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2E8B57',
+                        secondary: '#5F9EA0',
+                        accent: '#8FBC8F',
+                        light: '#F5F5DC',
+                        dark: '#2F4F4F'
+                    },
+                    fontFamily: {
+                        song: ['SimSun', 'serif'],
+                        hei: ['SimHei', 'sans-serif']
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .text-shadow-lg {
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-light overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-500" id="navbar">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center bg-transparent">
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-white hover:text-accent transition-colors duration-300">首页</a>
+                <a href="map.html" class="text-white hover:text-accent transition-colors duration-300">山河漫游</a>
+                <a href="#" class="text-white hover:text-accent transition-colors duration-300">过关闯将</a>
+                <a href="#" class="text-white hover:text-accent transition-colors duration-300">云锦书来</a>
+            </div>
+            <button class="md:hidden text-white text-2xl" id="menuBtn">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        <!-- 移动端菜单 -->
+        <div class="md:hidden bg-dark/80 bg-blur hidden" id="mobileMenu">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="index.html" class="text-white hover:text-accent transition-colors duration-300 py-2">首页</a>
+                <a href="map.html" class="text-white hover:text-accent transition-colors duration-300 py-2">山河漫游</a>
+                <a href="#" class="text-white hover:text-accent transition-colors duration-300 py-2">过关闯将</a>
+                <a href="#" class="text-white hover:text-accent transition-colors duration-300 py-2">云锦书来</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 视频背景 -->
+    <section class="relative h-screen w-full overflow-hidden">
+        <!-- 背景图片 -->
+        <div class="absolute inset-0 bg-black/30 z-10"></div>
+        <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('https://picsum.photos/id/10/1920/1080');">
+        </div>
+        
+        <!-- 文字介绍 -->
+        <div class="absolute inset-0 z-20 flex flex-col justify-end items-center text-center px-4 pb-32">
+            <div class="mb-6 opacity-0 transform translate-y-10 transition-all duration-1000" id="mainTitle">
+                <img src="PNG/shanhetuzhi.png" alt="山河图志" class="max-w-full h-auto max-h-[clamp(3rem,10vw,6rem)] object-contain">
+            </div>
+        </div>
+        <!-- 探索按钮 -->
+        <div class="absolute bottom-8 left-0 right-0 z-20 flex justify-center opacity-0 transform translate-y-10 transition-all duration-1000 delay-1000" id="exploreBtn">
+            <a href="map.html" class="px-6 py-2 bg-primary hover:bg-primary/80 text-white rounded-full transition-all duration-300 transform hover:scale-105 font-hei text-sm">
+                开始探索 <i class="fa fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 预留空间 - 稍后将添加中国地图及交互 -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <!-- 此处将添加中国地图及交互设计 -->
+        </div>
+    </section>
+
+    <!-- 精选景点预览 -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.8rem,5vw,3rem)] font-hei text-dark mb-6">精选景点</h2>
+                <div class="w-20 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 景点卡片 -->
+                <div class="relative group overflow-hidden rounded-lg shadow-lg h-80">
+                    <img src="https://picsum.photos/id/10/800/1200" alt="黄山" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+                        <h3 class="text-white text-xl font-hei">黄山</h3>
+                        <p class="text-white/80 text-sm">安徽省南部</p>
+                    </div>
+                </div>
+                
+                <div class="relative group overflow-hidden rounded-lg shadow-lg h-80">
+                    <img src="https://picsum.photos/id/15/800/1200" alt="长江三峡" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+                        <h3 class="text-white text-xl font-hei">长江三峡</h3>
+                        <p class="text-white/80 text-sm">湖北、重庆</p>
+                    </div>
+                </div>
+                
+                <div class="relative group overflow-hidden rounded-lg shadow-lg h-80">
+                    <img src="https://picsum.photos/id/29/800/1200" alt="长城" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+                        <h3 class="text-white text-xl font-hei">长城</h3>
+                        <p class="text-white/80 text-sm">北京市</p>
+                    </div>
+                </div>
+                
+                <div class="relative group overflow-hidden rounded-lg shadow-lg h-80">
+                    <img src="https://picsum.photos/id/30/800/1200" alt="桂林山水" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+                        <h3 class="text-white text-xl font-hei">桂林山水</h3>
+                        <p class="text-white/80 text-sm">广西壮族自治区</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="bg-dark text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-2xl font-song mb-2">方寸之间，万里山河</div>
+                    <p class="text-gray-400 text-sm">探索中国壮美山河，感受自然与人文的和谐共生</p>
+                </div>
+                </div>
+            <div class="mt-8 pt-6 border-t border-gray-700 text-center text-gray-400 text-sm">
+                武汉大学2025零杯网页设计大赛 网页设计这一块小组作品
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-dark/80', 'bg-blur');
+                navbar.classList.remove('bg-transparent');
+            } else {
+                navbar.classList.remove('bg-dark/80', 'bg-blur');
+                navbar.classList.add('bg-transparent');
+            }
+        });
+
+        // 移动端菜单
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 页面加载动画
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('mainTitle').classList.remove('opacity-0', 'translate-y-10');
+            }, 300);
+            
+            setTimeout(() => {
+                document.getElementById('exploreBtn').classList.remove('opacity-0', 'translate-y-10');
+            }, 800);
+        });
+    </script>
+</body>
+</html>
